@@ -12,6 +12,13 @@ import flixel.util.FlxMath;
  */
 class PlayState extends FlxState
 {
+	
+	public function new()
+	{
+		super();
+		//Will need this for seed later.
+	}
+	
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
