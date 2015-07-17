@@ -7,12 +7,11 @@ import flixel.FlxObject;
  * @author Shalmezad
  */
 class Player extends FlxSprite
-{
-
+{	
 	public function new() 
 	{
-		super(0,Main.gameHeight - Constants.FLOOR_HEIGHT - 50);
-		makeGraphic(20, 20, 0xFFFF0000);
+		super(0, Main.gameHeight - Constants.FLOOR_HEIGHT - 50);
+		loadGraphic("assets/images/player.png");
 		this.maxVelocity.x = Constants.PLAYER_HORIZONTAL_MAX_VELOCITY;
 		this.drag.x = Constants.PLAYER_HORIZONTAL_DRAG;
 		this.acceleration.y = Constants.PLAYER_GRAVITY_ACCELERATION;
@@ -25,10 +24,12 @@ class Player extends FlxSprite
 		if (InputUtil.LEFT_PRESSED() && !InputUtil.RIGHT_PRESSED())
 		{
 			this.acceleration.x = -1 * Constants.PLAYER_HORIZONTAL_ACCELERATION;
+			this.flipX = true;
 		}
 		else if (InputUtil.RIGHT_PRESSED() && !InputUtil.LEFT_PRESSED())
 		{
 			this.acceleration.x = Constants.PLAYER_HORIZONTAL_ACCELERATION;
+			this.flipX = false;
 		}
 	
 		if (InputUtil.JUMP_JUST_PRESSED())
