@@ -13,6 +13,7 @@ import flixel.util.FlxMath;
 class PlayState extends FlxState
 {
 	var player:Player;
+	var floor:FlxSprite;
 	
 	public function new()
 	{
@@ -27,6 +28,12 @@ class PlayState extends FlxState
 	{
 		trace("PlayState::create()");
 		super.create();
+		
+		floor = new FlxSprite(0, Main.gameHeight - Constants.FLOOR_HEIGHT);
+		floor.makeGraphic(Main.gameWidth, Constants.FLOOR_HEIGHT, 0xFF5555FF);
+		floor.immovable = true;
+		floor.moves = false;
+		add(floor);
 		player = new Player();
 		add(player);
 	}
@@ -46,5 +53,6 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
 		super.update();
+		FlxG.collide(player, floor);
 	}	
 }
