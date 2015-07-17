@@ -61,6 +61,15 @@ class MenuState extends FlxState
 		add(flashText);
 		
 		FlxFlicker.flicker(flashText, 0, 0.5, false, false);
+		
+		
+		var slogo:FlxSprite = new FlxSprite(10, Main.gameHeight - 50);
+		slogo.loadGraphic("assets/images/s_logo.png");
+		add(slogo);
+		
+		var clogo:FlxSprite = new FlxSprite(Main.gameWidth - 45, Main.gameHeight - 50);
+		clogo.loadGraphic("assets/images/clyde_machine_logo.png");
+		add(clogo);
 	}
 	
 	/**
