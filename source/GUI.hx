@@ -30,6 +30,11 @@ class GUI extends FlxGroup
 			centerText.color = 0xFFFF7777;
 			centerText.text = "Your score is 0 because you are dead.";
 		}
+		else if (!Reg.playState.player.visible)
+		{
+			centerText.color = 0xFF77FF77;
+			centerText.text = "You have escaped!\nYour score is: " + Std.string(Reg.score);
+		}
 	}
 	
 }

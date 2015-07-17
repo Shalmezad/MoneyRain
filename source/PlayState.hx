@@ -6,6 +6,7 @@ import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
+import flixel.ui.FlxBar;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import flixel.util.FlxRandom;
@@ -23,7 +24,7 @@ class PlayState extends FlxState
 	var enemyEmitter:FlxEmitter;
 	
 	var seed:Int;
-	
+	var runBar:FlxBar;
 	
 	public function new(seed:Int = 90210)
 	{
@@ -31,6 +32,7 @@ class PlayState extends FlxState
 		//Will need this for seed later.
 		this.seed = seed;
 		Reg.playState = this;
+		Reg.score = 0;
 		//DO NOT PUT ANY FLX STUFF IN HERE!!!
 	}
 	
@@ -50,6 +52,7 @@ class PlayState extends FlxState
 		add(moneyEmitter);
 		add(enemyEmitter);
 		add(gui);
+		add(runBar);
 	}
 	
 	private function createEntities():Void
@@ -81,6 +84,8 @@ class PlayState extends FlxState
 		enemyEmitter.gravity = Constants.PARTICLE_GRAVITY;
 		enemyEmitter.start(false, 0, .15);
 		
+		runBar = new FlxBar(0, 0, FlxBar.FILL_LEFT_TO_RIGHT, 30, 6, null, "", 0, 30, true);
+		runBar.visible = false;
 	}
 	
 	/**
@@ -101,22 +106,43 @@ class PlayState extends FlxState
 		FlxG.collide(player, floor);
 		FlxG.overlap(player, enemyEmitter,  playerEnemyOverlap);
 		FlxG.overlap(player, moneyEmitter, playerMoneyOverlap);
+		if (player.alive && player.visible && InputUtil.RUN_PRESSED() && (player.x < Constants.RUN_BORDER || player.x + player.width >  Main.gameWidth - Constants.RUN_BORDER))
+		{
+			runBar.currentValue += .25;
+			runBar.visible = true;
+			runBar.x = player.x;
+			runBar.y = player.y - runBar.height - 5;
+			if (runBar.currentValue >= 30)
+			{
+				//ESCAPE!
+				new FlxTimer(Constants.GAME_OVER_TEXT_TIME, endGame, 1);
+				player.visible = false;
+			}
+		}
+		else
+		{
+			runBar.percent = 0;
+			runBar.visible = false;
+		}
 	}	
 	
 	private function playerEnemyOverlap(player:FlxObject, enemy:FlxObject):Void
 	{
-		if (player.alive)
+		if (player.alive && player.visible)
 		{
 			player.kill();
 			Reg.score = 0;
-			new FlxTimer(4, endGame, 1);
+			new FlxTimer(Constants.GAME_OVER_TEXT_TIME, endGame, 1);
 		}
 	}
 	
 	private function playerMoneyOverlap(player:FlxObject, money:FlxObject):Void
 	{
-		money.kill();
-		Reg.score += 1;
+		if (player.alive && player.visible)
+		{
+			money.kill();
+			Reg.score += 1;
+		}
 	}
 	
 	private function endGame(f:FlxTimer):Void

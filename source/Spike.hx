@@ -20,7 +20,7 @@ class Spike extends FlxParticle
 	override public function update():Void
 	{
 		super.update();
-		if ((x < 0 || x > Main.gameWidth) && y > 10)
+		if ((x + this.width < 0 || x > Main.gameWidth) && y > 10)
 		{
 			kill();
 		}

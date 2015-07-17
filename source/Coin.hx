@@ -12,5 +12,13 @@ class Coin extends FlxParticle
         super();
 		loadGraphic("assets/images/coin.png");
 	}
-	
+		
+	override public function update():Void
+	{
+		super.update();
+		if ((x + this.width < 0 || x > Main.gameWidth) && y > 10)
+		{
+			kill();
+		}
+	}
 }

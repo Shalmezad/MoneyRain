@@ -23,4 +23,8 @@ class Constants
 	
 	public static var FLOOR_HEIGHT:Int = 20;
 	
+	public static var RUN_BORDER:Int = 40;
+	
+	public static var GAME_OVER_TEXT_TIME:Int = 1;
+	
 }
