@@ -12,6 +12,9 @@ class Spike extends FlxParticle
 	{
         super();
 		loadGraphic("assets/images/spike.png");
+		this.width = 14;
+		this.height = 14;
+		this.centerOffsets();
 	}
 	
 	override public function update():Void
