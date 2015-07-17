@@ -9,22 +9,29 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import flixel.util.FlxRandom;
+import flixel.util.FlxTimer;
 
 /**
  * A FlxState which can be used for the actual gameplay.
  */
 class PlayState extends FlxState
 {
-	var player:Player;
+	public var player:Player;
 	var floor:FlxSprite;
 	var gui:GUI;
 	var moneyEmitter:FlxEmitter;
 	var enemyEmitter:FlxEmitter;
 	
-	public function new()
+	var seed:Int;
+	
+	
+	public function new(seed:Int = 90210)
 	{
 		super();
 		//Will need this for seed later.
+		this.seed = seed;
+		Reg.playState = this;
+		//DO NOT PUT ANY FLX STUFF IN HERE!!!
 	}
 	
 	/**
@@ -34,7 +41,7 @@ class PlayState extends FlxState
 	{
 		trace("PlayState::create()");
 		super.create();
-		FlxRandom.globalSeed = 10;
+		FlxRandom.globalSeed = seed;
 		
 		createEntities();
 		
@@ -43,7 +50,6 @@ class PlayState extends FlxState
 		add(moneyEmitter);
 		add(enemyEmitter);
 		add(gui);
-		
 	}
 	
 	private function createEntities():Void
@@ -99,12 +105,22 @@ class PlayState extends FlxState
 	
 	private function playerEnemyOverlap(player:FlxObject, enemy:FlxObject):Void
 	{
-		player.kill();
+		if (player.alive)
+		{
+			player.kill();
+			Reg.score = 0;
+			new FlxTimer(4, endGame, 1);
+		}
 	}
 	
 	private function playerMoneyOverlap(player:FlxObject, money:FlxObject):Void
 	{
 		money.kill();
 		Reg.score += 1;
+	}
+	
+	private function endGame(f:FlxTimer):Void
+	{
+		FlxG.switchState(new MenuState());
 	}
 }

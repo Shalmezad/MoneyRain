@@ -15,6 +15,9 @@ class Player extends FlxSprite
 		this.maxVelocity.x = Constants.PLAYER_HORIZONTAL_MAX_VELOCITY;
 		this.drag.x = Constants.PLAYER_HORIZONTAL_DRAG;
 		this.acceleration.y = Constants.PLAYER_GRAVITY_ACCELERATION;
+		this.width = 13;
+		this.height = 26;
+		this.centerOffsets();
 	}
 	
 	
