@@ -17,6 +17,8 @@ class Constants
 	
 	public static var PLAYER_GRAVITY_ACCELERATION:Float = 200;
 	
+	public static var PLAYER_JUMP_VELOCITY:Float = -200;
+	
 	
 	public static var FLOOR_HEIGHT:Int = 20;
 	

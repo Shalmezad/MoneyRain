@@ -1,5 +1,6 @@
 package;
 import flixel.FlxSprite;
+import flixel.FlxObject;
 
 /**
  * ...
@@ -10,7 +11,7 @@ class Player extends FlxSprite
 
 	public function new() 
 	{
-		super(0,0);
+		super(0,Main.gameHeight - Constants.FLOOR_HEIGHT - 50);
 		makeGraphic(20, 20, 0xFFFF0000);
 		this.maxVelocity.x = Constants.PLAYER_HORIZONTAL_MAX_VELOCITY;
 		this.drag.x = Constants.PLAYER_HORIZONTAL_DRAG;
@@ -20,8 +21,6 @@ class Player extends FlxSprite
 	
 	override public function update():Void
 	{
-		super.update();
-		
 		this.acceleration.x = 0;
 		if (InputUtil.LEFT_PRESSED() && !InputUtil.RIGHT_PRESSED())
 		{
@@ -31,8 +30,19 @@ class Player extends FlxSprite
 		{
 			this.acceleration.x = Constants.PLAYER_HORIZONTAL_ACCELERATION;
 		}
+	
+		if (InputUtil.JUMP_JUST_PRESSED())
+		{
+			trace("Jump just pressed");
+			if(this.isTouching(FlxObject.FLOOR))
+			{
+				this.velocity.y = Constants.PLAYER_JUMP_VELOCITY;
+				trace("Jump!");
+			}
+		}
 		
 		keepOnScreen();
+		super.update();
 	}
 	
 	private function keepOnScreen():Void
