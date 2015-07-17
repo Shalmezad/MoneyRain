@@ -2,6 +2,7 @@ package;
 
 import flixel.effects.particles.FlxEmitter;
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
@@ -56,19 +57,23 @@ class PlayState extends FlxState
 		
 		gui = new GUI();
 		
-		moneyEmitter = new FlxEmitter(Main.gameWidth/2, -20, 50);
-		for (i in 0...50)
+		var moneySize:Int = 75;
+		moneyEmitter = new FlxEmitter(Main.gameWidth/2, -20, moneySize);
+		for (i in 0...moneySize)
 		{
 			moneyEmitter.add(new Coin());
 		}
-		moneyEmitter.start(false, 0, .05);
+		moneyEmitter.gravity = Constants.PARTICLE_GRAVITY;
+		moneyEmitter.start(false, 0, .10);
 		
-		enemyEmitter = new FlxEmitter(Main.gameWidth/2, -20, 50);
-		for (i in 0...50)
+		var enemySize:Int = 50;
+		enemyEmitter = new FlxEmitter(Main.gameWidth/2, -20, enemySize);
+		for (i in 0...enemySize)
 		{
 			enemyEmitter.add(new Spike());
 		}
-		enemyEmitter.start(false, 0, .05);
+		enemyEmitter.gravity = Constants.PARTICLE_GRAVITY;
+		enemyEmitter.start(false, 0, .15);
 		
 	}
 	
@@ -88,5 +93,18 @@ class PlayState extends FlxState
 	{
 		super.update();
 		FlxG.collide(player, floor);
+		FlxG.overlap(player, enemyEmitter,  playerEnemyOverlap);
+		FlxG.overlap(player, moneyEmitter, playerMoneyOverlap);
 	}	
+	
+	private function playerEnemyOverlap(player:FlxObject, enemy:FlxObject):Void
+	{
+		player.kill();
+	}
+	
+	private function playerMoneyOverlap(player:FlxObject, money:FlxObject):Void
+	{
+		money.kill();
+		Reg.score += 1;
+	}
 }
