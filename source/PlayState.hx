@@ -12,6 +12,7 @@ import flixel.util.FlxMath;
  */
 class PlayState extends FlxState
 {
+	var player:Player;
 	
 	public function new()
 	{
@@ -24,7 +25,10 @@ class PlayState extends FlxState
 	 */
 	override public function create():Void
 	{
+		trace("PlayState::create()");
 		super.create();
+		player = new Player();
+		add(player);
 	}
 	
 	/**
