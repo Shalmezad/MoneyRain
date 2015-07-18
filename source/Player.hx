@@ -11,7 +11,11 @@ class Player extends FlxSprite
 	public function new() 
 	{
 		super(0, Main.gameHeight - Constants.FLOOR_HEIGHT - 50);
-		loadGraphic("assets/images/player.png");
+		loadGraphic("assets/images/player.png", true, 15, 28);
+		animation.add("walk", [0, 1, 0, 2], 20);
+		animation.add("jump", [3]);
+		animation.add("skid", [4]);
+		animation.add("stand", [0]);
 		this.maxVelocity.x = Constants.PLAYER_HORIZONTAL_MAX_VELOCITY;
 		this.drag.x = Constants.PLAYER_HORIZONTAL_DRAG;
 		this.acceleration.y = Constants.PLAYER_GRAVITY_ACCELERATION;
@@ -43,6 +47,40 @@ class Player extends FlxSprite
 				this.velocity.y = Constants.PLAYER_JUMP_VELOCITY;
 				trace("Jump!");
 			}
+		}
+		
+		if (velocity.y != 0)
+		{
+			this.animation.play("jump");
+		}
+		else if (velocity.x != 0)
+		{
+			if (this.flipX)	//If we're trying to go left
+			{
+				if (this.velocity.x < 0)	//And we're going left
+				{
+					this.animation.play("walk");
+				}
+				else	//SKID
+				{
+					this.animation.play("skid");
+				}
+			}
+			else
+			{	//We're going right
+				if (this.velocity.x > 0)	//And we're going right
+				{
+					this.animation.play("walk");
+				}
+				else	//SKID
+				{
+					this.animation.play("skid");
+				}
+			}
+		}
+		else
+		{
+			this.animation.play("stand");
 		}
 		
 		keepOnScreen();
