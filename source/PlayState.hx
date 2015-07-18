@@ -1,6 +1,7 @@
 package;
 
 import flixel.effects.particles.FlxEmitter;
+import flixel.effects.particles.FlxParticle;
 import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -9,6 +10,7 @@ import flixel.text.FlxText;
 import flixel.ui.FlxBar;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
+import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
 import flixel.util.FlxTimer;
 
@@ -25,6 +27,8 @@ class PlayState extends FlxState
 	var goldMoneyEmitter:FlxEmitter;
 	var enemyEmitter:FlxEmitter;
 	
+	var blood:FlxEmitter;
+		
 	var seed:Int;
 	var runBar:FlxBar;
 	
@@ -107,6 +111,8 @@ class PlayState extends FlxState
 		
 		runBar = new FlxBar(0, 0, FlxBar.FILL_LEFT_TO_RIGHT, 30, 6, null, "", 0, 30, true);
 		runBar.visible = false;
+		
+		blood = new FlxEmitter(player.x + player.width / 2, player.y + player.height / 2, 40);
 	}
 	
 	/**
@@ -125,6 +131,7 @@ class PlayState extends FlxState
 	{
 		super.update();
 		FlxG.collide(player, floor);
+		FlxG.collide(blood, floor);
 		FlxG.overlap(player, enemyEmitter,  playerEnemyOverlap);
 		FlxG.overlap(player, bronzeMoneyEmitter, playerBronzeMoneyOverlap);
 		FlxG.overlap(player, silverMoneyEmitter, playerSilverMoneyOverlap);
@@ -149,13 +156,40 @@ class PlayState extends FlxState
 		}
 	}	
 	
+	private function killPlayer():Void
+	{
+		player.kill();
+		//Store what they did have, we'll need it for later...
+		var tempScore:Int = Reg.score;
+		Reg.score = 0;
+		new FlxTimer(Constants.GAME_OVER_TEXT_TIME, endGame, 1);
+		
+		blood.setColor(0xffaa0000, 0xffff0000);		
+		blood.gravity = 200;
+		blood.setXSpeed(-40, 40);
+		blood.setPosition(player.x + player.width / 2, player.y + player.height / 2);
+		for (i in 0...(Std.int(blood.maxSize / 2))) 
+		{
+			var _whitePixel:FlxParticle = new FlxParticle();
+			_whitePixel.makeGraphic(3, 3, 0xffcc0000);
+			// Make sure the particle doesn't show up at (0, 0)
+			_whitePixel.visible = false; 
+			blood.add(_whitePixel);
+			_whitePixel = new FlxParticle();
+			_whitePixel.makeGraphic(2, 2, 0xffcc0000);
+			_whitePixel.visible = false;
+			blood.add(_whitePixel);
+		}
+		blood.bounce = .8;
+		add(blood);
+		blood.start(true);
+	}
+	
 	private function playerEnemyOverlap(player:FlxObject, enemy:FlxObject):Void
 	{
 		if (player.alive && player.visible)
 		{
-			player.kill();
-			Reg.score = 0;
-			new FlxTimer(Constants.GAME_OVER_TEXT_TIME, endGame, 1);
+			killPlayer();
 		}
 	}
 	
