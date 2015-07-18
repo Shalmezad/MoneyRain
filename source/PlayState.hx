@@ -34,7 +34,7 @@ class PlayState extends FlxState
 	
 	var timeLeft:Int = 3;
 	
-	public function new(seed:Int = 77)
+	public function new(seed:Int = 88)
 	{
 		super();
 		//Will need this for seed later.
@@ -63,7 +63,11 @@ class PlayState extends FlxState
 		add(enemyEmitter);
 		add(gui);
 		add(runBar);
-		
+		#if flash
+		FlxG.sound.playMusic(AssetPaths.gameloop__mp3);
+		#else
+		FlxG.sound.playMusic(AssetPaths.gameloop__ogg);
+		#end
 		new FlxTimer(Constants.CHANGE_THEME_TIME-3, changeThemeTick, 1);
 	}
 	
@@ -222,6 +226,15 @@ class PlayState extends FlxState
 			runBar.percent = 0;
 			runBar.visible = false;
 		}
+		
+		
+		if (!player.visible || !player.alive)
+		{
+			if (InputUtil.JUMP_JUST_PRESSED())
+			{
+				endGame(null);
+			}
+		}
 	}	
 	
 	private function killPlayer():Void
@@ -251,6 +264,7 @@ class PlayState extends FlxState
 		blood.bounce = .8;
 		add(blood);
 		blood.start(true);
+		FlxG.sound.music.fadeOut(2, 0);
 	}
 	
 	private function playerEnemyOverlap(player:FlxObject, enemy:FlxObject):Void
@@ -288,6 +302,7 @@ class PlayState extends FlxState
 	
 	private function endGame(f:FlxTimer):Void
 	{
+		FlxG.sound.music.volume = 0;
 		FlxG.switchState(new MenuState());
 	}
 }

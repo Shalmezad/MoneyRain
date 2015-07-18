@@ -28,9 +28,8 @@
 	<!--------------------------------PATHS SETTINGS-------------------------------->
 	
 	<set name="BUILD_DIR" value="export" />
-	<classpath name="source" />
-	<assets path="assets" />
-	
+	<classpath name="source" />	
+	<assets path="assets"/>
 	<!--------------------------------LIBRARIES------------------------------------->
 
 	<haxelib name="flixel"/>
@@ -43,6 +42,7 @@
 	
 	<!--In case you want to use nape with flixel-->
 	<!--haxelib name="nape" /-->
+	<!--haxelib name="nme"/-->
 	
 	<!--------------------------------HAXEDEFINES----------------------------------->
 	
@@ -77,6 +77,6 @@
 	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
 	
 	<!--------------------------------CUSTOM---------------------------------------->
-	
+
 	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
 </project>

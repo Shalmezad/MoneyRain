@@ -8,6 +8,11 @@ import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import flixel.effects.FlxFlicker;
 import flixel.effects.particles.FlxEmitter;
+//import nme.net.URLRequest;
+//import nme.Lib;
+import flash.Lib;
+import flash.net.URLRequest;
+
 /**
  * A FlxState which can be used for the game's menu.
  */
@@ -17,10 +22,14 @@ class MenuState extends FlxState
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	var flashText:FlxText;
+	var slogo:FlxSprite;
+	var clogo:FlxSprite;
+	var linkText:FlxText;
 	 
 	override public function create():Void
 	{
 		super.create();
+		FlxG.sound.muteKeys = ["m", "M"];
 		
 		var bronzeMoneyEmitter:FlxEmitter;
 		var silverMoneyEmitter:FlxEmitter;
@@ -85,13 +94,18 @@ class MenuState extends FlxState
 		FlxFlicker.flicker(flashText, 0, 0.5, false, false);
 		
 		
-		var slogo:FlxSprite = new FlxSprite(10, Main.gameHeight - 50);
+		slogo = new FlxSprite(10, Main.gameHeight - 50);
 		slogo.loadGraphic("assets/images/s_logo.png");
 		add(slogo);
 		
-		var clogo:FlxSprite = new FlxSprite(Main.gameWidth - 45, Main.gameHeight - 50);
+		clogo = new FlxSprite(Main.gameWidth - 45, Main.gameHeight - 50);
 		clogo.loadGraphic("assets/images/clyde_machine_logo.png");
 		add(clogo);
+		
+		linkText = new FlxText(0, 10, Main.gameWidth);
+		linkText.y = Main.gameHeight - 40;
+		linkText.alignment = "center";
+		add(linkText);
 	}
 	
 	/**
@@ -112,6 +126,30 @@ class MenuState extends FlxState
 		if (InputUtil.JUMP_JUST_PRESSED())
 		{
 			FlxG.switchState(new PlayState());
+		}
+		
+		
+		
+		if (clogo.overlapsPoint(FlxG.mouse.getScreenPosition()))
+		{
+			linkText.text = "More music by Clyde Machine";
+			if (FlxG.mouse.justPressed)
+			{
+				Lib.getURL (new URLRequest ("http://clydemachine.com/"));
+			}
+		
+		}
+		else if (slogo.overlapsPoint(FlxG.mouse.getScreenPosition()))
+		{
+			linkText.text = "More games by Shalmezad";
+			if (FlxG.mouse.justPressed)
+			{
+				Lib.getURL (new URLRequest ("http://www.kongregate.com/accounts/Shalmezad"));
+			}
+		}
+		else
+		{
+			linkText.text = "";
 		}
 	}	
 }
