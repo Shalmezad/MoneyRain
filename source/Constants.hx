@@ -25,6 +25,6 @@ class Constants
 	
 	public static var RUN_BORDER:Int = 40;
 	
-	public static var GAME_OVER_TEXT_TIME:Int = 4;
+	public static var GAME_OVER_TEXT_TIME:Int = 3;
 	
 }
