@@ -32,6 +32,8 @@ class PlayState extends FlxState
 	var seed:Int;
 	var runBar:FlxBar;
 	
+	var timeLeft:Int = 3;
+	
 	public function new(seed:Int = 90210)
 	{
 		super();
@@ -61,6 +63,25 @@ class PlayState extends FlxState
 		add(enemyEmitter);
 		add(gui);
 		add(runBar);
+		
+		new FlxTimer(Constants.CHANGE_THEME_TIME-3, changeThemeTick, 1);
+	}
+	
+	private function changeThemeTick(f:FlxTimer):Void
+	{
+		//Look at this.timeLeft:
+		if (this.timeLeft > 0)
+		{
+			gui.playText = Std.string(this.timeLeft);
+			this.timeLeft -= 1;
+			new FlxTimer(1, changeThemeTick, 1);
+		}
+		else
+		{
+			gui.playText = "\"Nothing\"";
+			this.timeLeft = 3;
+			new FlxTimer(Constants.CHANGE_THEME_TIME-3, changeThemeTick, 1);
+		}
 	}
 	
 	private function createEntities():Void

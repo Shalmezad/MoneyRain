@@ -11,6 +11,8 @@ class GUI extends FlxGroup
 	var scoreText:FlxText;
 	var centerText:FlxText;
 	
+	public var playText:String="";
+	
 	public function new() 
 	{
 		super();
@@ -34,6 +36,11 @@ class GUI extends FlxGroup
 		{
 			centerText.color = 0xFF77FF77;
 			centerText.text = "You have escaped!\nYour score is: " + Std.string(Reg.score);
+		}
+		else
+		{
+			centerText.color = 0xFF77FF77;
+			centerText.text = playText;
 		}
 	}
 	
