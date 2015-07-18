@@ -78,9 +78,56 @@ class PlayState extends FlxState
 		}
 		else
 		{
-			gui.playText = "\"Nothing\"";
-			this.timeLeft = 3;
-			new FlxTimer(Constants.CHANGE_THEME_TIME-3, changeThemeTick, 1);
+			if (player.alive && player.visible)
+			{
+				this.timeLeft = 3;
+				new FlxTimer(Constants.CHANGE_THEME_TIME-3, changeThemeTick, 1);
+				changeTheme();
+			}
+		}
+	}
+	
+	private function changeTheme():Void
+	{
+		//RESET EVERYTHING FIRST!
+		bronzeMoneyEmitter.start(false, 0, Constants.BRONZE_FREQUENCY);
+		silverMoneyEmitter.start(false, 0, Constants.SILVER_FREQUENCY);
+		goldMoneyEmitter.start(false, 0, Constants.GOLD_FREQUENCY);
+		bronzeMoneyEmitter.setAlpha(1,1,1,1);
+		silverMoneyEmitter.setAlpha(1,1,1,1);
+		goldMoneyEmitter.setAlpha(1,1,1,1);
+		enemyEmitter.setAlpha(1,1,1,1);
+		player.alpha = 1;
+		
+		//THEN, set the theme
+		switch(FlxRandom.intRanged(0, 4))
+		{
+			case 0:
+				gui.playText = "\"Nothing\"\n(No, seriously)";
+			case 1:
+				gui.playText = "\"Greed is Good\"\n(10 free coins)";
+				Reg.score += 10;
+			case 2: 
+				gui.playText = "\"Sunny day\"\n(no moneycloud in sight)";
+				bronzeMoneyEmitter.on = false;
+				silverMoneyEmitter.on = false;
+				goldMoneyEmitter.on = false;
+				//bronzeMoneyEmitter.start(false, 0, 0);
+				//silverMoneyEmitter.start(false, 0, 0);
+				//goldMoneyEmitter.start(false, 0, 0);
+			case 3:
+				gui.playText = "\"Pay day!\"\n(More moolah)";
+				bronzeMoneyEmitter.start(false, 0, Constants.BRONZE_FREQUENCY/2);
+				silverMoneyEmitter.start(false, 0, Constants.SILVER_FREQUENCY/2);
+				goldMoneyEmitter.start(false, 0, Constants.GOLD_FREQUENCY / 2);
+			case 4:
+				gui.playText = "\"Low power\"\n(Need moar power!)";
+				bronzeMoneyEmitter.setAlpha(.5, .5, .5, .5);
+				silverMoneyEmitter.setAlpha(.5, .5, .5, .5);
+				goldMoneyEmitter.setAlpha(.5, .5, .5, .5);
+				enemyEmitter.setAlpha(.5, .5, .5, .5);
+				player.alpha = .5;
+				
 		}
 	}
 	

@@ -39,7 +39,7 @@ class GUI extends FlxGroup
 		}
 		else
 		{
-			centerText.color = 0xFF77FF77;
+			centerText.color = 0xCC77FF77;
 			centerText.text = playText;
 		}
 	}
