@@ -34,7 +34,7 @@ class PlayState extends FlxState
 	
 	var timeLeft:Int = 3;
 	
-	public function new(seed:Int = 90210)
+	public function new(seed:Int = 77)
 	{
 		super();
 		//Will need this for seed later.
