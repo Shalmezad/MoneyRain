@@ -4,13 +4,13 @@ import flixel.effects.particles.FlxParticle;
  * ...
  * @author Shalmezad
  */
-class Coin extends FlxParticle
+class SilverCoin extends FlxParticle
 {
 
 	public function new() 
 	{
         super();
-		loadGraphic("assets/images/coin.png");
+		loadGraphic("assets/images/silver_coin.png");
 	}
 		
 	override public function update():Void

@@ -27,4 +27,11 @@ class Constants
 	
 	public static var GAME_OVER_TEXT_TIME:Int = 3;
 	
+	public static var GOLD_VALUE:Int = 5;
+	public static var GOLD_FREQUENCY:Float = .7;
+	public static var SILVER_VALUE:Int = 3;
+	public static var SILVER_FREQUENCY:Float = .3;
+	public static var BRONZE_VALUE:Int = 1;
+	public static var BRONZE_FREQUENCY:Float = .10;
+	
 }

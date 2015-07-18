@@ -22,17 +22,37 @@ class MenuState extends FlxState
 	{
 		super.create();
 		
-		var moneyEmitter:FlxEmitter;
+		var bronzeMoneyEmitter:FlxEmitter;
+		var silverMoneyEmitter:FlxEmitter;
+		var goldMoneyEmitter:FlxEmitter;
 		var enemyEmitter:FlxEmitter;
 		
+
+		//BRONZE
 		var moneySize:Int = 75;
-		moneyEmitter = new FlxEmitter(Main.gameWidth/2, -20, moneySize);
+		bronzeMoneyEmitter = new FlxEmitter(Main.gameWidth/2, -20, moneySize);
 		for (i in 0...moneySize)
 		{
-			moneyEmitter.add(new Coin());
+			bronzeMoneyEmitter.add(new BronzeCoin());
 		}
-		moneyEmitter.gravity = Constants.PARTICLE_GRAVITY;
-		moneyEmitter.start(false, 0, .10);
+		bronzeMoneyEmitter.gravity = Constants.PARTICLE_GRAVITY;
+		bronzeMoneyEmitter.start(false, 0, Constants.BRONZE_FREQUENCY);
+		//SILVER
+		silverMoneyEmitter = new FlxEmitter(Main.gameWidth/2, -20, moneySize);
+		for (i in 0...moneySize)
+		{
+			silverMoneyEmitter.add(new SilverCoin());
+		}
+		silverMoneyEmitter.gravity = Constants.PARTICLE_GRAVITY;
+		silverMoneyEmitter.start(false, 0, Constants.SILVER_FREQUENCY);
+		//GOLD
+		goldMoneyEmitter = new FlxEmitter(Main.gameWidth/2, -20, moneySize);
+		for (i in 0...moneySize)
+		{
+			goldMoneyEmitter.add(new GoldCoin());
+		}
+		goldMoneyEmitter.gravity = Constants.PARTICLE_GRAVITY;
+		goldMoneyEmitter.start(false, 0, Constants.GOLD_FREQUENCY);
 		
 		var enemySize:Int = 50;
 		enemyEmitter = new FlxEmitter(Main.gameWidth/2, -20, enemySize);
@@ -42,7 +62,9 @@ class MenuState extends FlxState
 		}
 		enemyEmitter.gravity = Constants.PARTICLE_GRAVITY;
 		enemyEmitter.start(false, 0, .15);
-		add(moneyEmitter);
+		add(bronzeMoneyEmitter);
+		add(silverMoneyEmitter);
+		add(goldMoneyEmitter);
 		add(enemyEmitter);
 		
 		var titleText:FlxText = new FlxText(0, 10, Main.gameWidth, "Money Rain", 16);

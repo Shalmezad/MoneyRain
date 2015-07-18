@@ -20,7 +20,9 @@ class PlayState extends FlxState
 	public var player:Player;
 	var floor:FlxSprite;
 	var gui:GUI;
-	var moneyEmitter:FlxEmitter;
+	var bronzeMoneyEmitter:FlxEmitter;
+	var silverMoneyEmitter:FlxEmitter;
+	var goldMoneyEmitter:FlxEmitter;
 	var enemyEmitter:FlxEmitter;
 	
 	var seed:Int;
@@ -49,7 +51,9 @@ class PlayState extends FlxState
 		
 		add(floor);
 		add(player);
-		add(moneyEmitter);
+		add(bronzeMoneyEmitter);
+		add(silverMoneyEmitter);
+		add(goldMoneyEmitter);
 		add(enemyEmitter);
 		add(gui);
 		add(runBar);
@@ -66,14 +70,31 @@ class PlayState extends FlxState
 		
 		gui = new GUI();
 		
+		//BRONZE
 		var moneySize:Int = 75;
-		moneyEmitter = new FlxEmitter(Main.gameWidth/2, -20, moneySize);
+		bronzeMoneyEmitter = new FlxEmitter(Main.gameWidth/2, -20, moneySize);
 		for (i in 0...moneySize)
 		{
-			moneyEmitter.add(new Coin());
+			bronzeMoneyEmitter.add(new BronzeCoin());
 		}
-		moneyEmitter.gravity = Constants.PARTICLE_GRAVITY;
-		moneyEmitter.start(false, 0, .10);
+		bronzeMoneyEmitter.gravity = Constants.PARTICLE_GRAVITY;
+		bronzeMoneyEmitter.start(false, 0, Constants.BRONZE_FREQUENCY);
+		//SILVER
+		silverMoneyEmitter = new FlxEmitter(Main.gameWidth/2, -20, moneySize);
+		for (i in 0...moneySize)
+		{
+			silverMoneyEmitter.add(new SilverCoin());
+		}
+		silverMoneyEmitter.gravity = Constants.PARTICLE_GRAVITY;
+		silverMoneyEmitter.start(false, 0, Constants.SILVER_FREQUENCY);
+		//GOLD
+		goldMoneyEmitter = new FlxEmitter(Main.gameWidth/2, -20, moneySize);
+		for (i in 0...moneySize)
+		{
+			goldMoneyEmitter.add(new GoldCoin());
+		}
+		goldMoneyEmitter.gravity = Constants.PARTICLE_GRAVITY;
+		goldMoneyEmitter.start(false, 0, Constants.GOLD_FREQUENCY);
 		
 		var enemySize:Int = 50;
 		enemyEmitter = new FlxEmitter(Main.gameWidth/2, -20, enemySize);
@@ -105,7 +126,9 @@ class PlayState extends FlxState
 		super.update();
 		FlxG.collide(player, floor);
 		FlxG.overlap(player, enemyEmitter,  playerEnemyOverlap);
-		FlxG.overlap(player, moneyEmitter, playerMoneyOverlap);
+		FlxG.overlap(player, bronzeMoneyEmitter, playerBronzeMoneyOverlap);
+		FlxG.overlap(player, silverMoneyEmitter, playerSilverMoneyOverlap);
+		FlxG.overlap(player, goldMoneyEmitter, playerGoldMoneyOverlap);
 		if (player.alive && player.visible && InputUtil.RUN_PRESSED() && (player.x < Constants.RUN_BORDER || player.x + player.width >  Main.gameWidth - Constants.RUN_BORDER))
 		{
 			runBar.currentValue += .25;
@@ -136,12 +159,28 @@ class PlayState extends FlxState
 		}
 	}
 	
-	private function playerMoneyOverlap(player:FlxObject, money:FlxObject):Void
+	private function playerBronzeMoneyOverlap(player:FlxObject, money:FlxObject):Void
 	{
 		if (player.alive && player.visible)
 		{
 			money.kill();
-			Reg.score += 1;
+			Reg.score += Constants.BRONZE_VALUE;
+		}
+	}	
+	private function playerSilverMoneyOverlap(player:FlxObject, money:FlxObject):Void
+	{
+		if (player.alive && player.visible)
+		{
+			money.kill();
+			Reg.score += Constants.SILVER_VALUE;
+		}
+	}
+	private function playerGoldMoneyOverlap(player:FlxObject, money:FlxObject):Void
+	{
+		if (player.alive && player.visible)
+		{
+			money.kill();
+			Reg.score += Constants.GOLD_VALUE;
 		}
 	}
 	
