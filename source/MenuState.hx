@@ -13,9 +13,8 @@ import flixel.effects.particles.FlxEmitter;
 import flash.Lib;
 import flash.net.URLRequest;
 
-/**
- * A FlxState which can be used for the game's menu.
- */
+@:file("assets/data/gamejolt_api.privatekey") class GameJoltPrivateKey extends ByteArray { }
+
 class MenuState extends FlxState
 {
 	/**
