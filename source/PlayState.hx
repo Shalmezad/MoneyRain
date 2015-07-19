@@ -13,6 +13,7 @@ import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
 import flixel.util.FlxRandom;
 import flixel.util.FlxTimer;
+import flixel.addons.api.FlxGameJolt;
 
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -52,6 +53,8 @@ class PlayState extends FlxState
 		trace("PlayState::create()");
 		super.create();
 		FlxRandom.globalSeed = seed;
+		
+		FlxG.sound.muteKeys = ["m", "M"];
 		
 		createEntities();
 		
@@ -218,7 +221,9 @@ class PlayState extends FlxState
 			{
 				//ESCAPE!
 				new FlxTimer(Constants.GAME_OVER_TEXT_TIME, endGame, 1);
-				player.visible = false;
+				player.visible = false;				
+				FlxGameJolt.addScore(Std.string(Reg.score), Reg.score);
+				
 			}
 		}
 		else

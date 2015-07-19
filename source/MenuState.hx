@@ -12,6 +12,8 @@ import flixel.effects.particles.FlxEmitter;
 //import nme.Lib;
 import flash.Lib;
 import flash.net.URLRequest;
+import flash.utils.ByteArray;
+import flixel.addons.api.FlxGameJolt;
 
 @:file("assets/data/gamejolt_api.privatekey") class GameJoltPrivateKey extends ByteArray { }
 
@@ -24,11 +26,12 @@ class MenuState extends FlxState
 	var slogo:FlxSprite;
 	var clogo:FlxSprite;
 	var linkText:FlxText;
+	var canPlay:Bool = false;
 	 
 	override public function create():Void
 	{
 		super.create();
-		FlxG.sound.muteKeys = ["m", "M"];
+		//FlxG.sound.muteKeys = ["m", "M"];
 		
 		var bronzeMoneyEmitter:FlxEmitter;
 		var silverMoneyEmitter:FlxEmitter;
@@ -85,12 +88,11 @@ class MenuState extends FlxState
 		//subTitleText.color = 0xFFFFFF00;
 		add(subTitleText);
 		
-		flashText = new FlxText(0, Main.gameHeight / 2, Main.gameWidth, "Insert Coin to Continue", 8);
+		flashText = new FlxText(0, Main.gameHeight / 2, Main.gameWidth, "Setting up...", 8);
 		//flashText.color = 0xFFFFFF00;
 		flashText.alignment = "center";
 		add(flashText);
 		
-		FlxFlicker.flicker(flashText, 0, 0.5, false, false);
 		
 		
 		slogo = new FlxSprite(10, Main.gameHeight - 50);
@@ -105,6 +107,23 @@ class MenuState extends FlxState
 		linkText.y = Main.gameHeight - 40;
 		linkText.alignment = "center";
 		add(linkText);
+		
+		var ba:ByteArray = new GameJoltPrivateKey();
+		if (!FlxGameJolt.initialized) {
+			var privateKey:String = ba.readUTFBytes(ba.length);
+			trace(privateKey);
+			FlxGameJolt.init(80244, privateKey, true, null, null, initCallback);
+		} else {
+			//We're already good to go
+			allowContinue();
+		}
+	}
+	
+	private function allowContinue():Void
+	{
+		flashText.text = "Insert coin to continue";
+		FlxFlicker.flicker(flashText, 0, 0.5, false, false);
+		canPlay = true;
 	}
 	
 	/**
@@ -116,13 +135,14 @@ class MenuState extends FlxState
 		super.destroy();
 	}
 
+	
 	/**
 	 * Function that is called once every frame.
 	 */
 	override public function update():Void
 	{
 		super.update();
-		if (InputUtil.JUMP_JUST_PRESSED())
+		if (InputUtil.JUMP_JUST_PRESSED() && canPlay)
 		{
 			if (Reg.firstTime)
 			{
@@ -159,4 +179,20 @@ class MenuState extends FlxState
 			linkText.text = "";
 		}
 	}	
+	
+	
+	
+	private function initCallback(Result:Bool):Void
+	{
+		//if (_connection != null) {
+			if (Result) {
+				trace("Good to go");
+				this.allowContinue();
+			} else {
+				trace("Uh-oh.");
+				FlxG.switchState(new LoginState());
+			}
+		//}
+	}
+	
 }
