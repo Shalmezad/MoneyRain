@@ -125,7 +125,15 @@ class MenuState extends FlxState
 		super.update();
 		if (InputUtil.JUMP_JUST_PRESSED())
 		{
-			FlxG.switchState(new PlayState());
+			if (Reg.firstTime)
+			{
+				FlxG.switchState(new InstructionState());
+				Reg.firstTime = false;
+			}
+			else
+			{
+				FlxG.switchState(new PlayState());
+			}
 		}
 		
 		
